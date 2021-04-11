@@ -13,8 +13,32 @@
  * the output should be ["file", "file(1)", "image", "file(1)(1)", "file(2)"]
  *
  */
-function renameFiles(/* names */) {
-  throw new Error('Not implemented');
+function renameFiles(names) {
+  const newNames = [...names];
+  const count = {};
+
+  newNames.forEach((n, i) => {
+    if (newNames.indexOf(n) !== i) {
+      // console.log('we are in 2nd el', n);
+      // eslint-disable-next-line operator-assignment
+      const c = n in count ? count[n] = count[n] + 1 : count[n] = 1;
+      // console.log('count', c);
+      let j = c + 1;
+      let k = `${n}'('${j}')'`;
+
+      while (newNames.indexOf(k) !== -1) {
+        k = `${n}'('${j++}')'`;
+        newNames[i] = k;
+      }
+    }
+    return newNames;
+  });
+  // throw new Error('Not implemented');
+  return newNames;
 }
+
+// const names = ['file', 'file', 'image', 'file(1)', 'file'];
+
+// console.log(renameFiles(names));
 
 module.exports = renameFiles;
