@@ -28,7 +28,7 @@ function getDNSStats(domains) {
   const domainsStr = domainsSplit.map((d) => d.join('.'));
   // console.log('repeat', domainsStr);
 
-  if (allRepeat.lenght !== 1) {
+  if (allRepeat && allRepeat.lenght !== 1) {
     domainsStr.push(`.${allRepeat[0]}`);
   }
 
@@ -36,11 +36,14 @@ function getDNSStats(domains) {
   const objSwap = Object.entries(obj).reduce((ob, [key, value]) => ({ ...ob, [value]: key }), {});
   const keyArr = Object.keys(objSwap);
   keyArr.map((d) => {
-    // console.log('key', allRepeat.includes(d.split('.')[1]));
-    if (allRepeat.includes(d.split('.')[1])) {
+    objSwap[d] = 1;
+
+    if ((allRepeat && allRepeat[0] === (d.split('.').filter((e) => e !== ''))[0]
+        && d.split('.').filter((e) => e !== '').length === 1)
+        || d.split('.').filter((e) => e !== '').length === 2) {
       objSwap[d] = domainsSplit.length;
     }
-    objSwap[d] = 1;
+
     return objSwap;
   });
 
